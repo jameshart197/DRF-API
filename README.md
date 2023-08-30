@@ -1,38 +1,72 @@
-![CI logo](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
+# Moments - API
+## Project description
+Moments is a social media platform. It has been designed for its users to share their life's moments. The application consists of the React app and an API. Welcome to the Django Rest Framework API project section.
 
-Welcome,
+## User stories
+| Category  | as | I want to           | so that I can                                                                                    | mapping API feature                          |
+| --------- | -------- | ------------------------------ | ------------------------------------------------------------------------------------------------ | -------------------------------------------- |
+| auth      | user     | register for an account        | have a personal profile with a picture                                                           | dj-rest-auth<br>Create profile (signals)     |
+| auth      | user     | register for an account        | create, like and comment on posts                                                                | Create post<br>Create comment<br>Create like |
+| auth      | user     | register for an account        | follow users                                                                                     | Create follower                              |
+| posts     | visitor  | view a list of posts           | browse the most recent uploads                                                                   | List/ Filter posts                           |
+| posts     | visitor  | view an individual post        | see user feedback, i.e. likes and read comments                                                  | Retrieve post                                |
+| posts     | visitor  | search a list of posts         | find a post by a specific artist or a title                                                      | List/ Filter posts                           |
+| posts     | visitor  | scroll through a list of posts | browse the site more comfortably                                                                 | List/ Filter posts                           |
+| posts     | user     | edit and delete my post        | correct or hide any mistakes                                                                     | Update property<br>Destroy property          |
+| posts     | user     | create a post                  | share my moments with others                                                                     | Create post                                  |
+| posts     | user     | view liked posts               | go back often to my favourite posts                                                              | List/ Filter posts                           |
+| posts     | user     | view followed users' posts     | keep up with my favourite users' moments                                                         | List/ Filter posts                           |
+| likes     | user     | like a post                    | express my interest in someone's shared moment                                                   | Create like                                  |
+| likes     | user     | unlike a post                  | express that my interest in someone's shared moment has faded away                               | Destroy like                                 |
+| comments  | user     | create a comment               | share my thoughts on other people's content                                                      | Create comment                               |
+| comments  | user     | edit and delete my comment     | correct or hide any mistakes                                                                     | Update comment<br>Destroy comment            |
+| profiles  | user     | view a profile                 | see a user's recent posts + post, followers, following count data                                | Retrieve profile<br>List/ filter posts       |
+| profiles  | user     | edit a profile                 | update my profile information                                                                    | Update profile                               |
+| followers | user     | follow a profile               | express my interest in someone's content                                                         | Create follower                              |
+| followers | user     | unfollow a profile             | express that my interest in someone's content has faded away and remove their posts from my feed | Destroy follower                             |
 
-This is the Code Institute student template for Codeanywhere. If you are using Gitpod then you need [this template](https://github.com/Code-Institute-Org/gitpod-full-template) instead.  We have preinstalled all of the tools you need to get started. It's perfectly ok to use this template as the basis for your project submissions.
+## Entity Relationship Diagram
+![ERD](https://res.cloudinary.com/dgjrrvdbl/image/upload/v1649155000/moments-api-erd_aw81vx.png)
 
-You can safely delete this README.md file, or change it for your own project. Please do read it at least once, though! It contains some important information about Codeanywhere and the extensions we use. Some of this information has been updated since the video content was created. The last update to this file was: **July 26th, 2023**
+## Models and CRUD breakdown
+| model     | endpoints                    | create        | retrieve | update | delete | filter                   | text search |
+| --------- | ---------------------------- | ------------- | -------- | ------ | ------ | ------------------------ | ----------- |
+| users     | users/<br>users/:id/         | yes           | yes      | yes    | no     | no                       | no          |
+| profiles  | profiles/<br>profiles/:id/   | yes (signals) | yes      | yes    | no     | following<br>followed    | name        |
+| likes     | likes/<br>likes/:id/         | yes           | yes      | no     | yes    | no                       | no          |
+| comments  | comments/<br>comments/:id/   | yes           | yes      | yes    | yes    | post                     | no          |
+| followers | followers/<br>followers/:id/ | yes           | yes      | no     | yes    | no                       | no          |
+| posts     | posts/<br>posts/:id/         | yes           | yes      | yes    | yes    | profile<br>liked<br>feed | title       |
 
-## Codeanywhere Reminders
+## Tests
+- Posts app:
+    - logged out users can list posts
+    - logged in users can create a post
+    - logged out users can't create a post
+    - logged out users can retrieve a post with a valid id
+    - logged out users can't retrieve a post with an invalid id
+    - logged in users can update a post they own
+    - logged in users can't update a post they don't own
 
-To run a frontend (HTML, CSS, Javascript only) application in Codeanywhere, in the terminal, type:
-
-`python3 -m http.server`
-
-A button should appear to click: _Open Preview_ or _Open Browser_.
-
-To run a frontend (HTML, CSS, Javascript only) application in Codeanywhere with no-cache, you can use this alias for `python3 -m http.server`.
-
-`http_server`
-
-To run a backend Python file, type `python3 app.py`, if your Python file is named `app.py` of course.
-
-A button should appear to click: _Open Preview_ or _Open Browser_.
-
-In Codeanywhere you have superuser security privileges by default. Therefore you do not need to use the `sudo` (superuser do) command in the bash terminal in any of the lessons.
-
-To log into the Heroku toolbelt CLI:
-
-1. Log in to your Heroku account and go to _Account Settings_ in the menu under your avatar.
-2. Scroll down to the _API Key_ and click _Reveal_
-3. Copy the key
-4. In Codeanywhere, from the terminal, run `heroku_config`
-5. Paste in your API key when asked
-
-You can now use the `heroku` CLI program - try running `heroku apps` to confirm it works. This API key is unique and private to you so do not share it. If you accidentally make it public then you can create a new one with _Regenerate API Key_.
+## Deployment steps
+- set the following environment variables:
+    - CLIENT_ORIGIN
+    - CLOUDINARY_URL
+    - DATABASE_URL
+    - DISABLE_COLLECTSTATIC
+    - SECRET_KEY
+- installed the following libraries to handle database connection:
+    - psycopg2
+	- dj-database-url
+- configured dj-rest-auth library for JWTs
+- set allowed hosts
+- configured CORS:
+	- set allowed_origins
+- set default renderer to JSON
+- added Procfile with release and web commands
+- gitignored the env&#46;py file
+- generated requirements.txt
+- deployed to Heroku
 
 ---
 
